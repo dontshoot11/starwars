@@ -18,8 +18,9 @@ export default {
   },
 
   mounted() {
+    let SecureFilm = this.film.replace("http://", "https://");
     axios
-      .get(`${this.film}`)
+      .get(`${SecureFilm}`)
       .then(response => (this.filmTitle = response.data.title));
   }
 };

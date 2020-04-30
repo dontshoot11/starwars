@@ -6,9 +6,15 @@
           <div class="loading-screen__path">
             <div class="loading-screen__starship">
               <div class="loading-screen__fire">
-              <div class="loading-screen__flame loading-screen__flame--1"></div>
-              <div class="loading-screen__flame loading-screen__flame--2"></div>
-              <div class="loading-screen__flame loading-screen__flame--3"></div>
+                <div
+                  class="loading-screen__flame loading-screen__flame--1"
+                ></div>
+                <div
+                  class="loading-screen__flame loading-screen__flame--2"
+                ></div>
+                <div
+                  class="loading-screen__flame loading-screen__flame--3"
+                ></div>
               </div>
             </div>
           </div>
@@ -82,14 +88,12 @@ export default {
 
   mounted() {
     axios
-      .get("http://swapi.dev/api/people/")
+      .get("https://swapi.dev/api/people/")
       .then(
         response => ((this.data = response.data), (this.isLoading = false))
       );
     this.scroll();
   },
-
-
 
   methods: {
     forwards() {
@@ -102,7 +106,7 @@ export default {
     },
     getCharacters() {
       axios
-        .get(`http://swapi.dev/api/people/?search=${this.inquiry}`)
+        .get(`https://swapi.dev/api/people/?search=${this.inquiry}`)
         .then(response => (this.data = response.data));
     },
     search(e) {
@@ -124,7 +128,7 @@ export default {
         if (a == b || a + 1 == b) {
           let c = [];
           axios
-            .get(`http://swapi.dev/api/people/?page=${this.nextPage}`)
+            .get(`https://swapi.dev/api/people/?page=${this.nextPage}`)
             .then(response => {
               (c = response.data.results),
                 (this.data.results.push(c[0]),
@@ -152,7 +156,6 @@ export default {
 </script>
 
 <style lang="scss">
-
 @keyframes spin {
   to {
     transform: rotate(1turn);
@@ -160,8 +163,12 @@ export default {
 }
 
 @keyframes blink {
-  from { opacity: 1.0; }
-  to { opacity: 0.0; }
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 body {
   font-family: "Roboto", sans-serif;
@@ -306,42 +313,35 @@ ul {
   justify-content: center;
   align-items: center;
   bottom: -3px;
-  left:10px
+  left: 10px;
 }
 
-.loading-screen__flame--1{
+.loading-screen__flame--1 {
   animation: blink 0.5s infinite linear;
 
- 
   width: 14px;
   height: 2px;
-   background: url("./assets/flame1.png") no-repeat center;
+  background: url("./assets/flame1.png") no-repeat center;
   background-size: contain;
 }
 
-
-.loading-screen__flame--2{
-    animation: blink 0.5s infinite linear;
+.loading-screen__flame--2 {
+  animation: blink 0.5s infinite linear;
 
   width: 12px;
   height: 2px;
-   background: url("./assets/flame2.png") no-repeat center;
+  background: url("./assets/flame2.png") no-repeat center;
   background-size: contain;
 }
 
-
-.loading-screen__flame--3{
-    animation: blink 0.5s infinite linear;
-
+.loading-screen__flame--3 {
+  animation: blink 0.5s infinite linear;
 
   width: 9px;
   height: 2px;
-   background: url("./assets/flame3.png") no-repeat center;
+  background: url("./assets/flame3.png") no-repeat center;
   background-size: contain;
 }
-
-
- 
 
 .loading-screen__path {
   border-radius: 50%;

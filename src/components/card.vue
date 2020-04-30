@@ -3,7 +3,6 @@
     <div class="card__information">
       <div class="card__visible">
         <div class="card__userpic">{{ firstLetter }}</div>
-        
 
         <h2 class="card__name">{{ char.name }}</h2>
         <div class="card__species" v-if="!isOpened">{{ species }}</div>
@@ -13,12 +12,18 @@
           <div class="loading-screen loading-screen--card" v-if="isLoading">
             <div class="loading-screen__path">
               <div class="loading-screen__starship">
-              <div class="loading-screen__fire">
-              <div class="loading-screen__flame loading-screen__flame--1"></div>
-              <div class="loading-screen__flame loading-screen__flame--2"></div>
-              <div class="loading-screen__flame loading-screen__flame--3"></div>
+                <div class="loading-screen__fire">
+                  <div
+                    class="loading-screen__flame loading-screen__flame--1"
+                  ></div>
+                  <div
+                    class="loading-screen__flame loading-screen__flame--2"
+                  ></div>
+                  <div
+                    class="loading-screen__flame loading-screen__flame--3"
+                  ></div>
+                </div>
               </div>
-            </div>
             </div>
           </div>
         </transition>
@@ -71,18 +76,20 @@ export default {
     return {
       isOpened: false,
       homeplanet: "",
-      species: "",
+      species: "Human",
       isLoading: true
     };
   },
 
   mounted() {
-    axios
-      .get(`${this.char.species}`)
-      .then(
-        response => (this.species = response.data.name)
-      
-      );
+    if (this.char.species[0]) {
+      let secureSpecies = this.char.species[0].replace("http://", "https://");
+      if (secureSpecies) {
+        axios
+          .get(`${secureSpecies}`)
+          .then(response => (this.species = response.data.name));
+      }
+    }
   },
 
   updated() {
@@ -95,9 +102,11 @@ export default {
   methods: {
     open() {
       this.isOpened = !this.isOpened;
-      axios
-        .get(`${this.char.homeworld}`)
-        .then(response => (this.homeplanet = response.data.name),( setTimeout(() => this.isLoading=false, 2000)));
+      let SecurePlanet = this.char.homeworld.replace("http://", "https://");
+      axios.get(`${SecurePlanet}`).then(
+        response => (this.homeplanet = response.data.name),
+        setTimeout(() => (this.isLoading = false), 2000)
+      );
     }
   },
 
@@ -322,7 +331,7 @@ export default {
   background: #1a1a1a !important;
 }
 .loading-screen--card .loading-screen__path {
-  margin:0
+  margin: 0;
 }
 
 .card__fade-enter-active,
@@ -334,7 +343,7 @@ export default {
 .card__fade-enter,
 .card__fade-leave-to {
   opacity: 0;
-   transition-delay: 0s;
+  transition-delay: 0s;
 }
 
 @media (max-width: 768px) {
