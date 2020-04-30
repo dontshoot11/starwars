@@ -1,24 +1,9 @@
-# star_wars
+сервис для работы с api swapi.dew
 
-## Project setup
-```
-npm install
-```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+работающая версия тут
+https://dontshoot11.github.io/starwars/dist/
 
-### Compiles and minifies for production
-```
-npm run build
-```
+исходники можно посмотреть здесь
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+https://github.com/dontshoot11/starwars/tree/master/src
