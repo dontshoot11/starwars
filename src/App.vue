@@ -82,26 +82,14 @@ export default {
 
   mounted() {
     axios
-      .get("https://swapi.dev/api/people/")
+      .get("http://swapi.dev/api/people/")
       .then(
         response => ((this.data = response.data), (this.isLoading = false))
       );
     this.scroll();
   },
 
-  updated() {
-    if (this.currentData.previous != null) {
-      this.isPreviousAvailable = true;
-    } else {
-      this.isPreviousAvailable = false;
-    }
 
-    if (this.currentData.next != null) {
-      this.isNextAvailable = true;
-    } else {
-      this.isNextAvailable = false;
-    }
-  },
 
   methods: {
     forwards() {
@@ -114,7 +102,7 @@ export default {
     },
     getCharacters() {
       axios
-        .get(`https://swapi.dev/api/people/?search=${this.inquiry}`)
+        .get(`http://swapi.dev/api/people/?search=${this.inquiry}`)
         .then(response => (this.data = response.data));
     },
     search(e) {
@@ -136,7 +124,7 @@ export default {
         if (a == b || a + 1 == b) {
           let c = [];
           axios
-            .get(`https://swapi.dev/api/people/?page=${this.nextPage}`)
+            .get(`http://swapi.dev/api/people/?page=${this.nextPage}`)
             .then(response => {
               (c = response.data.results),
                 (this.data.results.push(c[0]),

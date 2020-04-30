@@ -3,6 +3,7 @@
     <div class="card__information">
       <div class="card__visible">
         <div class="card__userpic">{{ firstLetter }}</div>
+        
 
         <h2 class="card__name">{{ char.name }}</h2>
         <div class="card__species" v-if="!isOpened">{{ species }}</div>
