@@ -63,9 +63,7 @@ export default {
 
   data() {
     return {
-      inquiry: "",
-
-      isErrored: false
+      inquiry: ""
     };
   },
 
@@ -82,8 +80,7 @@ export default {
     },
     bottomOfWindow: function() {
       return document.documentElement.scrollTop + window.innerHeight;
-    },
- 
+    }
   },
 
   mounted() {
@@ -97,7 +94,6 @@ export default {
       this.getData();
     },
 
-    
     search(e) {
       e.preventDefault();
       this.searchCharacters(this.inquiry);
