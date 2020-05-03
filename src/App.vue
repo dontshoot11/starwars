@@ -49,10 +49,10 @@
 
 <script>
 import card from "./components/card.vue";
-import axios from "axios";
+
 import throttle from "./throttle";
 import { mapMutations } from "vuex";
-// eslint-disable-next-line no-unused-vars
+
 import { mapState } from "vuex";
 
 export default {
@@ -83,9 +83,7 @@ export default {
     bottomOfWindow: function() {
       return document.documentElement.scrollTop + window.innerHeight;
     },
-    computedNewData: function() {
-      return this.newData;
-    }
+ 
   },
 
   mounted() {
@@ -93,24 +91,20 @@ export default {
   },
 
   methods: {
-    ...mapMutations(["getData", "loadNextPage"]),
+    ...mapMutations(["getData", "loadNextPage", "searchCharacters"]),
 
     getAllData() {
       this.getData();
     },
 
-    getCharacters() {
-      axios
-        .get(`https://swapi.dev/api/people/?search=${this.inquiry}`)
-        .then(response => (this.data = response.data));
-    },
+    
     search(e) {
       e.preventDefault();
-      this.getCharacters();
+      this.searchCharacters(this.inquiry);
       this.nextPage = 2;
     },
     delayedSearch() {
-      this.getCharacters();
+      this.searchCharacters(this.inquiry);
       this.nextPage = 2;
     },
     scroll() {
