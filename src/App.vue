@@ -35,7 +35,7 @@
         <ul class="characters-list">
           <li
             class="characters-list__character"
-            v-for="character in currentData.results"
+            v-for="character in characterData.results"
             :key="character.name"
           >
             <card :char="character" />
@@ -51,6 +51,9 @@
 import card from "./components/card.vue";
 import axios from "axios";
 import throttle from "./throttle";
+import { mapMutations } from "vuex";
+// eslint-disable-next-line no-unused-vars
+import { mapState } from "vuex";
 
 export default {
   name: "App",
@@ -60,21 +63,20 @@ export default {
 
   data() {
     return {
-      data: [],
-      nextPage: 2,
-
       inquiry: "",
-      isPreviousAvailable: false,
-      isNextAvailable: true,
-      isLoading: true,
+
       isErrored: false
     };
   },
 
   computed: {
-    currentData: function() {
-      return this.data;
-    },
+    ...mapState({
+      characterData: state => state.characterData.data
+    }),
+    ...mapState({
+      isLoading: state => state.characterData.isLoading
+    }),
+
     debouncedGetCharacters: function() {
       return throttle(this.delayedSearch, 1000);
     },
@@ -87,23 +89,16 @@ export default {
   },
 
   mounted() {
-    axios
-      .get("https://swapi.dev/api/people/")
-      .then(
-        response => ((this.data = response.data), (this.isLoading = false))
-      );
-    this.scroll();
+    this.getAllData(), this.scroll();
   },
 
   methods: {
-    forwards() {
-      let nextData = this.data.next;
-      axios.get(nextData).then(response => (this.data = response.data));
+    ...mapMutations(["getData", "loadNextPage"]),
+
+    getAllData() {
+      this.getData();
     },
-    backwards() {
-      let previousData = this.data.previous;
-      axios.get(previousData).then(response => (this.data = response.data));
-    },
+
     getCharacters() {
       axios
         .get(`https://swapi.dev/api/people/?search=${this.inquiry}`)
@@ -126,28 +121,7 @@ export default {
         let b = Math.round(document.documentElement.offsetHeight);
 
         if (a == b || a + 1 == b) {
-          let c = [];
-          axios
-            .get(`https://swapi.dev/api/people/?page=${this.nextPage}`)
-            .then(response => {
-              (c = response.data.results),
-                (this.data.results.push(c[0]),
-                this.data.results.push(c[1]),
-                this.data.results.push(c[2]),
-                this.data.results.push(c[3]),
-                this.data.results.push(c[4]),
-                this.data.results.push(c[5]),
-                this.data.results.push(c[6]),
-                this.data.results.push(c[7]),
-                this.data.results.push(c[8]),
-                this.data.results.push(c[9]));
-            })
-            .catch(err => {
-              console.log(err.response);
-              this.isErrored = true;
-            });
-
-          this.nextPage++;
+          this.loadNextPage();
         }
       };
     }
