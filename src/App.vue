@@ -21,7 +21,7 @@
         </div>
       </transition>
       <section class="maincontent">
-        <form v-on:submit="search" class="searchbar" action="">
+        <form v-on:submit="search" class="searchbar" v-if="!isLoading">
           <input
             placeholder="Search by Name"
             type="text"
@@ -32,7 +32,7 @@
           <button type="submit" class="searchbar__button"></button>
         </form>
 
-        <ul class="characters-list">
+        <ul class="characters-list" v-if="!isLoading">
           <li
             class="characters-list__character"
             v-for="character in characterData.results"
@@ -41,7 +41,29 @@
             <card :char="character" />
           </li>
         </ul>
+        <div v-if="!isAdditionalLoadingAvailable" class="errormessage">
+          Impossible. Perhaps the archieves are incomplete
+        </div>
       </section>
+      <transition name="fade" v-if="isAdditionalLoading">
+        <div class="loading-screen loading-screen--additional">
+          <div class="loading-screen__path">
+            <div class="loading-screen__starship">
+              <div class="loading-screen__fire">
+                <div
+                  class="loading-screen__flame loading-screen__flame--1"
+                ></div>
+                <div
+                  class="loading-screen__flame loading-screen__flame--2"
+                ></div>
+                <div
+                  class="loading-screen__flame loading-screen__flame--3"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -68,10 +90,11 @@ export default {
 
   computed: {
     ...mapState({
-      characterData: state => state.characterData.data
-    }),
-    ...mapState({
-      isLoading: state => state.characterData.isLoading
+      characterData: state => state.swData.characterData,
+      isLoading: state => state.swData.isLoading,
+      isAdditionalLoading: state => state.swData.isAdditionalLoading,
+      isAdditionalLoadingAvailable: state =>
+        state.swData.isAdditionalLoadingAvailable
     }),
 
     debouncedGetCharacters: function() {
@@ -96,11 +119,9 @@ export default {
     search(e) {
       e.preventDefault();
       this.searchCharacters(this.inquiry);
-      this.nextPage = 2;
     },
     delayedSearch() {
       this.searchCharacters(this.inquiry);
-      this.nextPage = 2;
     },
     scroll() {
       window.onscroll = () => {
@@ -110,7 +131,9 @@ export default {
         let b = Math.round(document.documentElement.offsetHeight);
 
         if (a == b || a + 1 == b) {
-          this.loadNextPage();
+          if (!this.isLoading && this.isAdditionalLoadingAvailable) {
+            this.loadNextPage();
+          }
         }
       };
     }
@@ -222,7 +245,8 @@ button::-moz-focus-inner {
 
 .footer {
   background: #1a1a1a;
-  margin-top: 160px;
+  margin-top: 100px;
+
   text-align: center;
   flex-shrink: 0;
 }
@@ -259,17 +283,17 @@ ul {
   margin: 0 auto;
   grid-gap: 32px;
   position: relative;
+  margin-bottom: 30px;
 }
 
 .loading-screen {
   position: absolute;
   height: 100%;
-  width: 120%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: start;
-  top: 0;
-  left: -10%;
+
   z-index: 999;
 
   background: #333333;
@@ -324,12 +348,30 @@ ul {
 .loading-screen__path {
   border-radius: 50%;
 
-  width: 90px;
+  width: 120px;
   height: 90px;
-  margin: 20vh;
+
   animation: spin 2.5s infinite linear;
 
   position: relative;
+
+  margin-top: 20vh;
+}
+
+.loading-screen--additional {
+  top: unset;
+  position: relative;
+  width: 100%;
+  left: 0;
+  margin-top: 20px;
+
+  bottom: 0;
+  height: auto;
+}
+
+.loading-screen--additional .loading-screen__starship {
+  bottom: 0;
+  top: unset;
 }
 
 .loaded {
@@ -362,15 +404,17 @@ ul {
 
   font-size: 18px;
 }
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;
-  transition-delay: 2s;
+  transition-delay: 0s;
 }
 
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+  transition-delay: 0s;
 }
 
 .searchbar__input:focus {
@@ -387,6 +431,14 @@ ul {
   right: 0;
   bottom: 85px;
   cursor: pointer;
+}
+
+.errormessage {
+  width: 100%;
+
+  color: #d2b833;
+  font-size: 22px;
+  font-weight: bold;
 }
 
 @media (max-width: 768px) {

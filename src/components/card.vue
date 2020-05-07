@@ -10,26 +10,26 @@
         <h2 class="card__name">{{ char.name }}</h2>
         <div class="card__species" v-if="!isOpened">{{ species }}</div>
       </div>
+
       <div class="card__hidden" v-if="isOpened">
-        <transition name="card__fade">
-          <div class="loading-screen loading-screen--card" v-if="isLoading">
-            <div class="loading-screen__path">
-              <div class="loading-screen__starship">
-                <div class="loading-screen__fire">
-                  <div
-                    class="loading-screen__flame loading-screen__flame--1"
-                  ></div>
-                  <div
-                    class="loading-screen__flame loading-screen__flame--2"
-                  ></div>
-                  <div
-                    class="loading-screen__flame loading-screen__flame--3"
-                  ></div>
-                </div>
+        <div class="loading-screen loading-screen--card" v-if="isLoading">
+          <div class="loading-screen__path">
+            <div class="loading-screen__starship">
+              <div class="loading-screen__fire">
+                <div
+                  class="loading-screen__flame loading-screen__flame--1"
+                ></div>
+                <div
+                  class="loading-screen__flame loading-screen__flame--2"
+                ></div>
+                <div
+                  class="loading-screen__flame loading-screen__flame--3"
+                ></div>
               </div>
             </div>
           </div>
-        </transition>
+        </div>
+
         <div class="card__hidden-element card__hidden-element--year">
           <div class="card__key">birth</div>
           <div class="card__value">{{ char.birth_year }}</div>
@@ -138,7 +138,7 @@ export default {
       let SecurePlanet = this.char.homeworld.replace("http://", "https://");
       axios.get(`${SecurePlanet}`).then(
         response => (this.homeplanet = response.data.name),
-        setTimeout(() => (this.isLoading = false), 1000)
+        setTimeout(() => (this.isLoading = false), 2000)
       );
       this.homelink = this.char.homeworld;
     },
@@ -176,10 +176,20 @@ export default {
 </script>
 
 <style lang="scss">
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .card {
   cursor: pointer;
   color: #fff;
   height: 100%;
+  animation: fadein 0.5s;
 }
 
 .card__name {
