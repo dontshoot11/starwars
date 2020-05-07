@@ -27,7 +27,7 @@
             type="text"
             class="searchbar__input"
             v-model="inquiry"
-            v-on:keyup="debouncedGetCharacters"
+            @input="debouncedGetCharacters"
           />
           <button type="submit" class="searchbar__button"></button>
         </form>
@@ -40,7 +40,6 @@
           >
             <card :char="character" />
           </li>
-          <div class="charactets-list__error" v-if="isErrored">вот и всё!</div>
         </ul>
       </section>
     </div>
@@ -142,6 +141,21 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+}
+
+button {
+  background: inherit;
+  color: inherit;
+  border: none;
+  cursor: pointer;
+}
+
+button:active,
+button:focus {
+  outline: none;
+}
+button::-moz-focus-inner {
+  border: 0;
 }
 
 .wrapper {

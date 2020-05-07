@@ -1,27 +1,17 @@
 <template>
-  <div>{{ filmTitle }}</div>
+  <div>{{ film }}</div>
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   props: {
-    film: String,
-    isOpened: Boolean
+    film: String
   },
 
   data() {
     return {
       filmTitle: ""
     };
-  },
-
-  mounted() {
-    let SecureFilm = this.film.replace("http://", "https://");
-    axios
-      .get(`${SecureFilm}`)
-      .then(response => (this.filmTitle = response.data.title));
   }
 };
 </script>

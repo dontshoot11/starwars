@@ -1,8 +1,11 @@
 <template>
-  <div v-on:click="open" :class="{ opened: isOpened }" class="card">
+  <div :class="{ opened: isOpened }" class="card">
     <div class="card__information">
-      <div class="card__visible">
-        <div class="card__userpic">{{ firstLetter }}</div>
+      <button v-on:click="close" v-if="isOpened" class="card__button">Х</button>
+      <div v-on:click="open" class="card__visible">
+        <div class="card__userpic" v-bind:style="{ background: activeColor }">
+          {{ firstLetter }}
+        </div>
 
         <h2 class="card__name">{{ char.name }}</h2>
         <div class="card__species" v-if="!isOpened">{{ species }}</div>
@@ -50,10 +53,10 @@
           <ul class="card__film-list">
             <li
               class="card__films-item value"
-              v-for="film in char.films"
+              v-for="film in movies"
               :key="film.name"
             >
-              <film :film="film" :isOpened="isOpened" />
+              <film :film="film" />
             </li>
           </ul>
         </div>
@@ -65,6 +68,7 @@
 <script>
 import axios from "axios";
 import film from "././film";
+
 export default {
   props: {
     char: {}
@@ -76,37 +80,90 @@ export default {
     return {
       isOpened: false,
       homeplanet: "",
+      homelink: "",
       species: "Human",
-      isLoading: true
+      isLoading: true,
+      colors: [
+        "#F08080",
+        "#FF0000",
+        "#FF69B4",
+        "#FF6347",
+        "#FF00FF",
+        "#9932CC",
+        "#6A5ACD",
+        "#00FF00",
+        "#FFFF00"
+      ],
+      activeColor: "",
+      movies: [],
+      filmLinks: []
     };
   },
 
   mounted() {
-    if (this.char.species[0]) {
-      let secureSpecies = this.char.species[0].replace("http://", "https://");
-      if (secureSpecies) {
-        axios
-          .get(`${secureSpecies}`)
-          .then(response => (this.species = response.data.name));
-      }
-    }
+    this.getSpecies();
   },
 
-  updated() {
-    let typeOfSpecies = typeof this.species;
-    if (typeOfSpecies !== "string") {
-      this.species = "Human";
-    }
+  beforeMount() {
+    this.setColor();
   },
 
   methods: {
+    getSpecies() {
+      if (this.char.species[0]) {
+        let secureSpecies = this.char.species[0].replace("http://", "https://");
+        if (secureSpecies) {
+          axios
+            .get(`${secureSpecies}`)
+            .then(response => (this.species = response.data.name));
+        }
+      }
+    },
     open() {
-      this.isOpened = !this.isOpened;
+      this.isOpened = true;
+
+      if (this.char.homeworld !== this.homelink) {
+        this.getHomeworld();
+      }
+      if (this.char.films !== this.filmLinks) {
+        this.getFilms();
+      }
+    },
+
+    close() {
+      this.isOpened = false;
+    },
+
+    getHomeworld() {
       let SecurePlanet = this.char.homeworld.replace("http://", "https://");
       axios.get(`${SecurePlanet}`).then(
         response => (this.homeplanet = response.data.name),
-        setTimeout(() => (this.isLoading = false), 2000)
+        setTimeout(() => (this.isLoading = false), 1000)
       );
+      this.homelink = this.char.homeworld;
+    },
+
+    getFilms() {
+      for (let i = 0; i <= this.char.films.length; i++) {
+        if (this.char.films[i]) {
+          let SecureFilm = this.char.films[i].replace("http://", "https://");
+
+          axios
+            .get(`${SecureFilm}`)
+
+            .then(response => this.movies.push(response.data.title));
+        }
+      }
+      this.filmLinks = this.char.films;
+    },
+
+    setColor() {
+      let colorId = Math.floor(
+        Math.random(0, this.colors.length) * Math.floor(this.colors.length)
+      );
+
+      this.colors[colorId];
+      this.activeColor = this.colors[colorId];
     }
   },
 
@@ -184,8 +241,9 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 90px;
-  margin-bottom: 90px;
+  padding-top: 90px;
+  padding-bottom: 90px;
+  width: 100%;
 }
 
 .opened {
@@ -224,6 +282,7 @@ export default {
   padding-bottom: 80px;
   width: 80%;
   justify-content: start;
+  padding-top: 0;
 }
 
 .card__hidden {
