@@ -41,7 +41,7 @@
             <card :char="character" />
           </li>
         </ul>
-        <div v-if="!isAdditionalLoadingAvailable" class="errormessage">
+        <div v-if="isThisIsTheEnd" class="errormessage">
           Impossible. Perhaps the archieves are incomplete
         </div>
       </section>
@@ -94,7 +94,8 @@ export default {
       isLoading: state => state.swData.isLoading,
       isAdditionalLoading: state => state.swData.isAdditionalLoading,
       isAdditionalLoadingAvailable: state =>
-        state.swData.isAdditionalLoadingAvailable
+        state.swData.isAdditionalLoadingAvailable,
+      isThisIsTheEnd: state => state.swData.isThisIsTheEnd
     }),
 
     debouncedGetCharacters: function() {
@@ -329,7 +330,6 @@ ul {
 
 .loading-screen__flame--2 {
   animation: blink 0.9s infinite linear;
-
 
   width: 12px;
   height: 4px;
