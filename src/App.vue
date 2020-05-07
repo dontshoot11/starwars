@@ -314,33 +314,34 @@ ul {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  bottom: -3px;
-  left: 10px;
+  bottom: -8px;
+  left: 12px;
 }
 
 .loading-screen__flame--1 {
-  animation: blink 0.5s infinite linear;
+  animation: blink 0.8s infinite linear;
 
   width: 14px;
-  height: 2px;
+  height: 4px;
   background: url("./assets/flame1.png") no-repeat center;
   background-size: contain;
 }
 
 .loading-screen__flame--2 {
-  animation: blink 0.5s infinite linear;
+  animation: blink 0.9s infinite linear;
+
 
   width: 12px;
-  height: 2px;
+  height: 4px;
   background: url("./assets/flame2.png") no-repeat center;
   background-size: contain;
 }
 
 .loading-screen__flame--3 {
-  animation: blink 0.5s infinite linear;
+  animation: blink 1s infinite linear;
 
   width: 9px;
-  height: 2px;
+  height: 4px;
   background: url("./assets/flame3.png") no-repeat center;
   background-size: contain;
 }
