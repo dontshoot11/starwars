@@ -64,6 +64,7 @@
           </div>
         </div>
       </transition>
+      <a href="#top" class="link-to-top" v-if="showLinkToTheTop"></a>
     </div>
   </div>
 </template>
@@ -84,7 +85,8 @@ export default {
 
   data() {
     return {
-      inquiry: ""
+      inquiry: "",
+      showLinkToTheTop: false
     };
   },
 
@@ -131,6 +133,12 @@ export default {
         );
         let b = Math.round(document.documentElement.offsetHeight);
 
+        if (document.documentElement.scrollTop > window.innerHeight) {
+          this.showLinkToTheTop = true;
+        } else {
+          this.showLinkToTheTop = false;
+        }
+
         if (a == b || a + 1 == b) {
           if (!this.isLoading && this.isAdditionalLoadingAvailable) {
             this.loadNextPage();
@@ -157,6 +165,11 @@ export default {
     opacity: 0;
   }
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: "Roboto", sans-serif;
   margin: 0;
@@ -165,6 +178,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+  scroll-behavior: smooth;
 }
 
 button {
@@ -172,6 +186,12 @@ button {
   color: inherit;
   border: none;
   cursor: pointer;
+}
+
+a,
+a:visited,
+a:focus {
+  text-decoration: none;
 }
 
 button:active,
@@ -440,6 +460,18 @@ ul {
   color: #d2b833;
   font-size: 22px;
   font-weight: bold;
+}
+
+.link-to-top {
+  position: fixed;
+  top: 3%;
+  right: 3%;
+  color: #fff;
+  font-weight: bold;
+  width: 50px;
+  height: 50px;
+  background: url("./assets/arrow.png") no-repeat center;
+  background-size: contain;
 }
 
 @media (max-width: 768px) {
