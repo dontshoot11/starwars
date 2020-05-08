@@ -38,7 +38,11 @@
             v-for="character in characterData.results"
             :key="character.name"
           >
-            <card :char="character" />
+            <card
+              @openCard="openCard"
+              :char="character"
+              @closeCard="closeCard"
+            />
           </li>
         </ul>
         <div v-if="isThisIsTheEnd" class="errormessage">
@@ -117,6 +121,16 @@ export default {
 
     getAllData() {
       this.getData();
+    },
+
+    openCard() {
+      this.showLinkToTheTop = false;
+
+      document.documentElement.style.overflow = "hidden";
+    },
+
+    closeCard() {
+      document.documentElement.style.overflow = "auto";
     },
 
     search(e) {

@@ -121,6 +121,7 @@ export default {
     },
     open() {
       this.isOpened = true;
+      this.$emit("openCard");
 
       if (this.char.homeworld !== this.homelink) {
         this.getHomeworld();
@@ -132,6 +133,7 @@ export default {
 
     close() {
       this.isOpened = false;
+      this.$emit("closeCard");
     },
 
     getHomeworld() {
