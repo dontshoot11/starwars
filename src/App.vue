@@ -68,7 +68,11 @@
           </div>
         </div>
       </transition>
-      <a href="#top" class="link-to-top" v-if="showLinkToTheTop"></a>
+      <a
+        href="#top"
+        class="link-to-top"
+        v-if="(!isCardOpened, showLinkToTheTop)"
+      ></a>
     </div>
   </div>
 </template>
@@ -90,7 +94,8 @@ export default {
   data() {
     return {
       inquiry: "",
-      showLinkToTheTop: false
+      showLinkToTheTop: false,
+      isCardOpened: false
     };
   },
 
@@ -125,12 +130,14 @@ export default {
 
     openCard() {
       this.showLinkToTheTop = false;
+      this.isCardOpened = true;
 
       document.documentElement.style.overflow = "hidden";
     },
 
     closeCard() {
       document.documentElement.style.overflow = "auto";
+      this.isCardOpened = false;
     },
 
     search(e) {
